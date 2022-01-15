@@ -13,6 +13,7 @@ void setup() {
   background(background);
   menu = createGraphics(width, height);
   
+  // empty ellipses used
   noFill();
 
   blendMode(LIGHTEST);
@@ -20,8 +21,17 @@ void setup() {
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       for (int z = depth; z > 0; z--) {
+        // thinner lines farther, thicker lines closer
+        strokeWeight(1.5 - z / depth);
          if (random(1) < 0.00001f * z * z) {
-           galaxies.add(new Galaxy(0, new PVector(x, y), color(random(255), random(255), random(255)), z * z));
+           if (z == depth) {
+             stroke(color(random(50, 255), random(50, 255), random(50, 255)));
+             strokeWeight(.5);
+             point(x, y);
+           } else {
+             // add square depth as control for size where farther gets smaller quickly, constant to move the scale around
+             galaxies.add(new Galaxy(new PVector(x, y), color(random(255), random(255), random(255)), z * z * .5));
+           }
          }
       }
     }
