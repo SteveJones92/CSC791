@@ -1,10 +1,29 @@
+int step = 30;
 
 void setup() {
   frameRate(60);
-  size(1600, 900);
+  size(400, 400);
+  background(0);
+  stroke(255, 255, 255, 200);
 }
 
-// in 1 frame show a compare or show a swap
 void draw() {
-  background(0);
+  
+}
+
+void draw_10print() {
+  int x = mouseX;
+  int y = mouseY;
+  
+  strokeWeight(step / 2);
+  
+  //for (; x < 400; x += step) {
+    //for (; y < 400; y += step) {
+      line(x, y, x + step, y + step);
+    //}
+  //}
+}
+
+void mousePressed() {
+  draw_10print();
 }
