@@ -14,15 +14,14 @@ void setup() {
   menu = createGraphics(width, height);
   
   noFill();
+
   blendMode(LIGHTEST);
-  
   galaxies = new ArrayList<Galaxy>();
-  //galaxies.add(new Galaxy(0, new PVector(100, 100), color(random(255), random(255), random(255)), 1, 0, 0));
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       for (int z = depth; z > 0; z--) {
          if (random(1) < 0.00001f * z * z) {
-           galaxies.add(new Galaxy(0, new PVector(x, y), color(random(255), random(255), random(255)), z * z, z));
+           galaxies.add(new Galaxy(0, new PVector(x, y), color(random(255), random(255), random(255)), z * z));
          }
       }
     }

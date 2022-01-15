@@ -5,11 +5,11 @@ class Galaxy {
   int sizeY;
   color colour;
   
-  public Galaxy(int type, PVector position, color colour, float distance, float squish) {
+  public Galaxy(int type, PVector position, color colour, float distance) {
     this.position = position;
     sizeX = distance <= max_size ? (int)(max_size / distance) : 2;
     sizeY = distance <= max_size ? (int)(max_size / distance) : 2;
-    float squishX = random(0.2, 1.5);
+    float squishX = random(0.2, 1.2);
     sizeX *= squishX;
     this.colour = colour;
     
