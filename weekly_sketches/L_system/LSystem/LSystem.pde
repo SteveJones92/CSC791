@@ -1,3 +1,6 @@
+// reference in building
+// https://www.vexlio.com/blog/drawing-simple-organics-with-l-systems/
+
 PGraphics menu;
 color background = color(0);
 
