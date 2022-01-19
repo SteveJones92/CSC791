@@ -36,7 +36,7 @@ void setup() {
              color newColor = lerpColor(red, blue, random(1) * random(1));
              // add square depth as control for size where farther gets smaller quickly, constant to move the scale around
              //galaxies.add(new Galaxy(new PVector(x, y), color(random(255), random(255), random(255)), z * z * .5));
-             galaxies.add(new Galaxy(new PVector(x, y), lerpColor(newColor, color(255), random(1)), z * z * .5));
+             galaxies.add(new Galaxy(new PVector(x, y), lerpColor(color(255), newColor, random(1) * random(1)), z * z * .5));
            }
          }
       }
