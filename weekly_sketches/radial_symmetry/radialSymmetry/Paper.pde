@@ -1,10 +1,11 @@
 // TODO make paper moveable, triangles are currently independent
 // TODO get triangles to reflect about a line
+// TODO issue with placement, different sizes at different scale
 class Paper {
   // initial position 0
   PVector position = new PVector(width / 2, height / 2);
   // standard paper dimensions
-  PVector dimensions = new PVector(8.5, 11);
+  PVector dimensions = new PVector(8.5, 8.5);
   // pixels to inches conversion is 96 pixels per inch - so this is half real page size
   int scale = 96 / 2;
   // square units, ie 2 triangles - how small they are which equals detail
@@ -59,5 +60,12 @@ class Paper {
       } else fill(255);
       item.display();
     }
+      stroke(color(200, 100, 100));
+      strokeWeight(5);
+      noFill();
+      ellipse(width / 2, height / 2, dimensions.x * scale, dimensions.y * scale);
+      fill(255);
+      stroke(100);
+      strokeWeight(0.5);
   }
 }

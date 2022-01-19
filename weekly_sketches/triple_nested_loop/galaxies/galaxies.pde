@@ -3,6 +3,10 @@ ArrayList<Galaxy> galaxies;
 
 color background = color(0);
 int depth = 12;
+color red = color(255, 100, 100);
+color blue = color(100, 100, 255);
+
+
 
 void setup() {
   // set framerate, size of window, and overlay of that size for the path to draw on
@@ -29,8 +33,10 @@ void setup() {
              strokeWeight(.5);
              point(x, y);
            } else {
+             color newColor = lerpColor(red, blue, random(1) * random(1));
              // add square depth as control for size where farther gets smaller quickly, constant to move the scale around
-             galaxies.add(new Galaxy(new PVector(x, y), color(random(255), random(255), random(255)), z * z * .5));
+             //galaxies.add(new Galaxy(new PVector(x, y), color(random(255), random(255), random(255)), z * z * .5));
+             galaxies.add(new Galaxy(new PVector(x, y), lerpColor(newColor, color(255), random(1)), z * z * .5));
            }
          }
       }
