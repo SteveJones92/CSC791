@@ -86,10 +86,10 @@ void draw() {
 }
 
 class Grammar {
-  String ch;
+  char ch;
   String str;
   
-  public Grammar(String ch, String str) {
+  public Grammar(char ch, String str) {
     this.ch = ch;
     this.str = str;
   }
@@ -99,18 +99,33 @@ void runGrammar(String a, int num) {
   if (a == null) return;
   
   ArrayList<Grammar> grammars = new ArrayList<Grammar>();
-  grammars.add(new Grammar("A", "AA[-A++A][+A--A]"));
-  grammars.add(new Grammar("Z", "A[-----Z][+++++Z]"));
+  grammars.add(new Grammar('F', "FF[-F++F][+F--F]"));
+  grammars.add(new Grammar('X', "F[-----X][+++++X]"));
+  grammars.add(new Grammar('+', "+"));
+  grammars.add(new Grammar('-', "-"));
+  grammars.add(new Grammar('[', "["));
+  grammars.add(new Grammar(']', "]"));
+  
+  String tmp = "";
+  
   // replace characters how many times they need to be replaced
   for (int i = 0; i < num; i++) {
-    for (Grammar item : grammars) {
-      a = a.replaceAll(item.ch, item.str);
+    for (int j = 0; j < a.length(); j++) {
+      for (Grammar item : grammars) {
+        if (item.ch == a.charAt(j)) {
+          tmp += item.str;
+          break;
+        }
+      }
     }
+    a = tmp;
+    tmp = "";
   }
+  //println(a);
   for (int j = 0; j < a.length(); j++) {
     switch (a.substring(j, j + 1)) {
-      case "A":
-        A();
+      case "F":
+        F();
         break;
       case "+":
         rotation += radians(rotation_inc);
@@ -131,7 +146,7 @@ void runGrammar(String a, int num) {
   }
 }
 
-void A() {
+void F() {
   float x = len * cos(rotation);
   float y = len * sin(rotation);
   stroke(color(random(150, 255), random(150, 255), random(150, 255)));
