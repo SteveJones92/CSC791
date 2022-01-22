@@ -31,6 +31,16 @@ class Triangle {
     this.second = new PVector(first.x + len * cos(radians(rotation + degrees)), first.y + size * sin(radians(rotation + degrees)));
     this.third =  new PVector(first.x + len * cos(radians(rotation + angle + degrees)), first.y + len * sin(radians(rotation + angle + degrees)));
     rotation += degrees;
+    
+    for (PShape shape : shapes) {
+      for (int i = 0; i < shape.getVertexCount(); i++) {
+        PVector vertex = shape.getVertex(i);
+        PVector new_vertex = new PVector();
+        new_vertex.x = (vertex.x - width / 2) * cos(radians(degrees)) - (vertex.y - height / 2) * sin(radians(degrees)) + width / 2;
+        new_vertex.y = (vertex.x - width / 2) * sin(radians(degrees)) + (vertex.y - height / 2) * cos(radians(degrees)) + height / 2;
+        shape.setVertex(i, new_vertex);
+      }
+    }
   }
   
   Triangle copy() {

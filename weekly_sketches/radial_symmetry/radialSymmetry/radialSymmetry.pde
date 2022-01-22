@@ -27,7 +27,7 @@ void setup() {
 float val = 0;
 
 void draw() {
-  background(255);
+  background(0);
   tri.display();
   float split = 360 / num;
   for (int i = 1; i < num; i++) {
