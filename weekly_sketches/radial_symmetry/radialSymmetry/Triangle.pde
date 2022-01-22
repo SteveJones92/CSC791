@@ -15,7 +15,7 @@ class Triangle {
     this.len = len;
     this.angle = angle;
     this.rotation = rotation;
-    this.second = new PVector(center.x + len * cos(radians(rotation)), center.y + size * sin(radians(rotation)));
+    this.second = new PVector(center.x + len * cos(radians(rotation)), center.y + len * sin(radians(rotation)));
     this.third =  new PVector(center.x + len * cos(radians(rotation + angle)), center.y + len * sin(radians(rotation + angle)));
   }
   
