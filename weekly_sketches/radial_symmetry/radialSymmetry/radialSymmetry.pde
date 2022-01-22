@@ -28,15 +28,17 @@ void setup() {
 void draw() {
   background(0);
   tri.display();
-  float split = 360 / num;
-  for (int i = 1; i < num; i++) {
-    Triangle cpy = tri.copy();
-    cpy.col = color(230);
-    cpy.rotate(split * i);
-    if (i % 2 == 1)  {
-      cpy.mirror();
+  if (hide) {
+    float split = 360 / num;
+    for (int i = 1; i < num; i++) {
+      Triangle cpy = tri.copy();
+      cpy.col = color(230);
+      cpy.rotate(split * i);
+      if (i % 2 == 1)  {
+        cpy.mirror();
+      }
+      cpy.display();
     }
-    cpy.display();
   }
   
   for (PVector point : points) {

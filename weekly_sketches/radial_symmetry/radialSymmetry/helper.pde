@@ -32,6 +32,15 @@ void mouseReleased() {
   tri.shapes.add(new_shape);
 }
 
+boolean hide = false;
+void keyPressed() {
+  if (key == 'h') {
+    hide = !hide;
+  } else if (key == BACKSPACE) {
+    if (tri.shapes.size() > 0) tri.shapes.remove(tri.shapes.size() - 1);
+  }
+}
+
 // https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
 float area(PVector first, PVector second, PVector third) {
    return abs( (first.x * (second.y - third.y) +
