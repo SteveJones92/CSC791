@@ -43,6 +43,28 @@ class Triangle {
     }
   }
   
+  void mirror() {
+    for (PShape shape : shapes) {
+      for (int i = 0; i < shape.getVertexCount(); i++) {
+        PVector vertex = shape.getVertex(i);
+        PVector new_vertex = new PVector();
+        new_vertex.x = (vertex.x - width / 2) * cos(-radians(rotation + angle / 2)) - (vertex.y - height / 2) * sin(-radians(rotation + angle / 2)) + width / 2;
+        new_vertex.y = (vertex.x - width / 2) * sin(-radians(rotation + angle / 2)) + (vertex.y - height / 2) * cos(-radians(rotation + angle / 2)) + height / 2;
+        new_vertex.y = (new_vertex.y - height / 2) * -1 + height / 2;
+        shape.setVertex(i, new_vertex);
+      }
+    }
+    for (PShape shape : shapes) {
+      for (int i = 0; i < shape.getVertexCount(); i++) {
+        PVector vertex = shape.getVertex(i);
+        PVector new_vertex = new PVector();
+        new_vertex.x = (vertex.x - width / 2) * cos(radians((rotation + angle / 2))) - (vertex.y - height / 2) * sin(radians((rotation + angle / 2))) + width / 2;
+        new_vertex.y = (vertex.x - width / 2) * sin(radians((rotation + angle / 2))) + (vertex.y - height / 2) * cos(radians((rotation + angle / 2))) + height / 2;
+        shape.setVertex(i, new_vertex);
+      }
+    }
+  }
+  
   Triangle copy() {
     Triangle ret = new Triangle(new PVector(first.x, first.y), len, angle, rotation);
     for (PShape shape : shapes) {

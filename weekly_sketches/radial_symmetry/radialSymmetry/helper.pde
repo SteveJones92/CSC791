@@ -5,24 +5,32 @@ void mousePressed() {
   tmp_shape.beginShape();
   tmp_shape.fill(0);
   tmp_shape.noStroke();
-  //tmp_shape.vertex(mouseX, mouseY);
 }
 
 void mouseDragged() {
-  if (isInside(new PVector(mouseX, mouseY), tri.first, tri.second, tri.third)) {
-    //PVector lastVertex = tmp_shape.getVertex(tmp_shape.getVertexCount() - 1);
-    //if (dist(lastVertex.x, lastVertex.y, mouseX, mouseY) > 5) tmp_shape.vertex(mouseX, mouseY);
-    tmp_shape.vertex(mouseX, mouseY);
-  }
+  tmp_shape.vertex(mouseX, mouseY);
+  points.add(new PVector(mouseX, mouseY));
 }
 
 void mouseReleased() {
-  //tmp_shape.vertex(mouseX, mouseY);
+  tmp_shape.vertex(mouseX, mouseY);
   tmp_shape.endShape(CLOSE);
-  //println(tmp_shape.getVertexCount());
-  tri.shapes.add(tmp_shape);
+  points = new ArrayList<PVector>();
+  
+  PShape new_shape = createShape();
+  new_shape.beginShape();
+  new_shape.fill(0);
+  new_shape.noStroke();
+  
+  for (int i = 0; i < tmp_shape.getVertexCount(); i++) {
+    PVector vertex = tmp_shape.getVertex(i);
+    if (isInside(new PVector(vertex.x, vertex.y), tri.first, tri.second, tri.third)) {
+      new_shape.vertex(vertex.x, vertex.y);
+    }
+  }
+  new_shape.endShape(CLOSE);
+  tri.shapes.add(new_shape);
 }
-
 
 // https://www.geeksforgeeks.org/check-whether-a-given-point-lies-inside-a-triangle-or-not/
 float area(PVector first, PVector second, PVector third) {
@@ -56,10 +64,8 @@ PShape shape_clone(PShape obj) {
   new_shape.noStroke();
   for(int i = 0; i < obj.getVertexCount(); i++) {
     PVector vertex = obj.getVertex(i);
-
     new_shape.vertex(vertex.x, vertex.y);
   }
-
   new_shape.endShape(CLOSE);
 
   return new_shape;
