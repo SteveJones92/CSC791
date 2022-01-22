@@ -1,6 +1,10 @@
 void mouseDragged() {
-  for (Triangle item : paper.selected) {
-    paper.pieces.remove(item);
+  if (isInside(new PVector(mouseX, mouseY), tri.first, tri.second, tri.third)) {
+    tri.drawover.beginDraw();
+    tri.drawover.stroke(0);
+    tri.drawover.ellipse(mouseX, mouseY, 2, 2);
+    tri.drawover.endDraw();
+    tri.drawover_cpy = tri.drawover.get();
   }
 }
 
