@@ -13,9 +13,9 @@ float startX;
 float startY;
 
 // starting values or things to do with the animation
-float rotation_inc = 0;
-int iter = 0;
-float len = 0;
+float rotation_inc = 30;
+int iter = 4;
+float len = 5;
 int step = 1;
 
 float rotation_rate = 0.2f;
@@ -41,11 +41,11 @@ void setup() {
   startX = width / 2;
   startY = 0;
   t = millis();
-  
+  reset();
 }
 
 void draw() {
-  
+  /*
   if (next && !free) {
     rotation_inc = 180;
     iter = 6;
@@ -83,6 +83,8 @@ void draw() {
       reset();
     }
   }
+  */
+  //reset();
 }
 
 class Grammar {
@@ -99,8 +101,9 @@ void runGrammar(String a, int num) {
   if (a == null) return;
   
   ArrayList<Grammar> grammars = new ArrayList<Grammar>();
-  grammars.add(new Grammar('F', "FF[-F++F][+F--F]"));
-  grammars.add(new Grammar('X', "F[-----X][+++++X]"));
+  grammars.add(new Grammar('X', "X+YF"));
+  grammars.add(new Grammar('Y', "FX-Y"));
+  grammars.add(new Grammar('Z', "FX+FX+"));
   grammars.add(new Grammar('+', "+"));
   grammars.add(new Grammar('-', "-"));
   grammars.add(new Grammar('[', "["));

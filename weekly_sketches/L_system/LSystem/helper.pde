@@ -25,7 +25,7 @@ void reset() {
   strokeWeight(1);
   position = new PVector(startX, height - startY);
   rotation = -radians(90);
-  runGrammar("X", iter);
+  runGrammar("Z", iter);
   
   // draw menu
   menu.beginDraw();
