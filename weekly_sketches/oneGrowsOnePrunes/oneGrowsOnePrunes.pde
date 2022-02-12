@@ -1,8 +1,9 @@
 int startSize = 300;
 int startRes = 5;
-int numLayers = 100;
+int numLayers = 30;
 
 Player player;
+int speed = 10;
 
 void setup() {
   frameRate(30);
@@ -14,9 +15,10 @@ void setup() {
   }
   
   // basically worker threads to do things
-  thread("grow");
-  thread("shrink");
+  //thread("grow");
+  //thread("shrink");
   //thread("movement");
+  thread("moves");
 }
 
 // should be used simply for rendering only, so framerate can handle efficiency of drawing itself

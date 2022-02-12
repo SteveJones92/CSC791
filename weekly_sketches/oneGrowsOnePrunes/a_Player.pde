@@ -1,29 +1,34 @@
 class Player {
+  // the player shape
   ArrayList<Shape> shapes = new ArrayList<Shape>();
-  int moveSpeed;
+  // the formation or target
+  ArrayList<Shape> targets = new ArrayList<Shape>();
+  
+  int moveSpeed = speed;
   PVector position;
-  PVector direction = new PVector(0, 0);
   
   
   public Player(PVector position) {
     this.position = position;
-    this.moveSpeed = 10;
   }
   
   public void addShape(int size, int resolution, color col) {
     shapes.add(new Shape(this.position, size, resolution, col));
+    targets.add(new Shape(new PVector(300, 300), size, resolution, color(100)));
   }
   
   public void move() {
-    for (Shape shape : shapes) {
-      // try to move if it isnt already
-      if (!shape.isMoving) shape.move(moveSpeed, direction);
+    for (int i = 0; i < shapes.size(); i++) {
+      shapes.get(i).moveTowards(targets.get(i), 1000);
     }
   }
   
   void display() {
     for (Shape shape : shapes) {
       shape.display();
+    }
+    for (Shape target : targets) {
+      target.display();
     }
   }
 }

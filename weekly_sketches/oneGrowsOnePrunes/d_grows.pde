@@ -19,7 +19,7 @@ void grow() {
         //item.shape.active[pos] = true;
         
         vect = shape.vertices.get(pos);
-        vect.mult(1.01 + 0.01 * (shape.size - vect.mag()) / shape.sizeBounds);
+        vect.mult(1.01 + 0.01 * (shape.size - vect.mag()));
       }
     }
     delay(1);

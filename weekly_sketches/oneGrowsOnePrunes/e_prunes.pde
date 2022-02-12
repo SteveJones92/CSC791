@@ -19,7 +19,7 @@ void shrink() {
         //item.shape.active[pos] = true;
         
         vect = shape.vertices.get(pos);
-        vect.mult(0.99 + 0.01 * (shape.size - vect.mag()) / shape.sizeBounds);
+        vect.mult(0.99 + 0.01 * (shape.size - vect.mag()));
 
       }
     }
