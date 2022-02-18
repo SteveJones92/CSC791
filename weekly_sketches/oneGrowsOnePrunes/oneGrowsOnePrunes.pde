@@ -1,7 +1,7 @@
-int startSize = 50;
-int lowRes = 5;
-int highRes = 30;
-int numLayers = 10;
+int startSize = 100;
+int lowRes = 3;
+int highRes = 3;
+int numLayers = 4;
 float scale = 1;
 PVector camPosition;
 PVector camPositionStart;

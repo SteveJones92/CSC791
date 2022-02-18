@@ -5,7 +5,7 @@ class Player {
   ArrayList<Bullet> bullets = new ArrayList<Bullet>();
   
   PVector position;
-  Timer fireRate = new Timer(.5);
+  Timer fireRate = new Timer(.1);
   Timer moveRate = new Timer(0.01);
   Timer rotateRate = new Timer(0.01);
   int moveSpeed = 10;
@@ -38,11 +38,15 @@ class Player {
     if (fireRate.timeDone()) {
       for (Shape shape : shapes) {
         for (PVector vertex : shape.vertices) {
-          PVector velocity = new PVector(mouseX - translation.x - (vertex.x + shape.position.x), mouseY - translation.y - (vertex.y + shape.position.y));
+          //if (random(1) > 0.8)
+          PVector vertexPos = new PVector( vertex.x * cos(shape.rotation) - vertex.y * sin(shape.rotation),
+                                           vertex.x * sin(shape.rotation) + vertex.y * cos(shape.rotation));
+                                           
+          PVector velocity = new PVector(mouseX - translation.x - (vertexPos.x + shape.position.x), mouseY - translation.y - (vertexPos.y + shape.position.y));
           velocity.normalize();
           velocity.mult(sqrt(shape.size));
-          //if (random(1) > 0.8)
-          bullets.add(new Bullet(new PVector(vertex.x + shape.position.x, vertex.y + shape.position.y), velocity, (int)sqrt(shape.size), shape.col));
+
+          bullets.add(new Bullet(new PVector(vertexPos.x + shape.position.x, vertexPos.y + shape.position.y), velocity, (int)sqrt(shape.size), shape.col));
           //shape.size -= (int)sqrt(shape.size / shape.numPoints);
         }
       }
