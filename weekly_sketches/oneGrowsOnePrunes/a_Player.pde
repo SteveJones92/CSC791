@@ -1,11 +1,16 @@
 class Player {
-  // the player shape
+  // shapes that make up the player
   ArrayList<Shape> shapes = new ArrayList<Shape>();
-  // the formation or target
-  ArrayList<Shape> targets = new ArrayList<Shape>();
+  // bullets that the player fires
+  ArrayList<Bullet> bullets = new ArrayList<Bullet>();
   
-  int moveSpeed = speed;
   PVector position;
+  Timer fireRate = new Timer(1);
+  Timer moveRate = new Timer(0.01);
+  Timer rotateRate = new Timer(0.01);
+  int moveSpeed = 10;
+  int rotationSpeed = 3;
+  float growRate = 1;
   
   
   public Player(PVector position) {
@@ -17,18 +22,46 @@ class Player {
     targets.add(new Shape(new PVector(300, 300), size, resolution, color(100)));
   }
   
-  public void move() {
-    for (int i = 0; i < shapes.size(); i++) {
-      shapes.get(i).moveTowards(targets.get(i), 1000);
+  void move(PVector step, float rotateAmount) {
+    if (moveRate.timeDone()) {
+      position.x += step.x * moveSpeed;
+      position.y += step.y * moveSpeed;
+    }
+    
+    if (rotateRate.timeDone()) {
+      for (Shape shape : shapes) {
+        shape.rotation += rotateAmount * rotationSpeed;
+      }
     }
   }
   
+  void fire() {
+    if (fireRate.timeDone()) {
+      for (Shape shape : shapes) {
+        for (PVector vertex : shape.vertices) {
+          PVector velocity = new PVector(mouseX - translation.x - (vertex.x + shape.position.x), mouseY - translation.y - (vertex.y + shape.position.y));
+          velocity.normalize();
+          velocity.mult(sqrt(shape.size));
+          //if (random(1) > 0.8)
+          bullets.add(new Bullet(new PVector(vertex.x + shape.position.x, vertex.y + shape.position.y), velocity, (int)sqrt(shape.size), shape.col));
+          //shape.size -= (int)sqrt(shape.size / shape.numPoints);
+        }
+      }
+    }
+  }
+  
+  // display and clean up bullets
   void display() {
     for (Shape shape : shapes) {
       shape.display();
     }
-    for (Shape target : targets) {
-      target.display();
+    for (int i = 0; i < bullets.size(); i++) {
+      if (bullets.get(i).col == color(0)) {
+        bullets.remove(i--);
+        continue;
+      }
+      bullets.get(i).update();
+      bullets.get(i).display();
     }
   }
 }
