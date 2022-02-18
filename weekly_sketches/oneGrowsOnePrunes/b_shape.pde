@@ -1,65 +1,81 @@
-
-// what kind of properties will my shape have?
-// size? smaller means it needs to step faster on movement but at a smaller dist or it looks weird
-// complexity? more or less edges - requires a faster update on vertice moving
-// move speed - how many pixels per second can you travel, must have timing to enforce
-// possibly collect into a ship, can maintain proper movement at different sizes as a group
+// size
+// complexity? more or less edges
+// move speed - how many pixels per second can you travel
 // color
-// volatility? look achieved by turning on or off vertices, or possibly larger random growth or limit beyond limit or faster rate
-// growth? as a multiplication fact, larger shapes change distance much faster unless the rate changes by size
-// growth limit? the set size might want to limit vertices from randomly getting too large or too small
+// growth
+// growth limit
 // 
 class Shape {
   float size;
+  float sizeBounds;
   int numPoints;
   PVector position;
   color col;
+  float speedScale = 5;
+  float rotation;
   
-  // for movement
-  boolean[] moveList;
-
   ArrayList<PVector> vertices = new ArrayList<>();
   
   PVector tempVert;
   
-  public Shape(PVector position, float startSize, int numPoints, color col) {
+  public Shape(PVector position, int startSize, int numPoints, color col) {
     this.col = col;
     this.numPoints = numPoints;
     this.position = position;
     this.size = startSize;
-    this.moveList = new boolean[numPoints];
+    this.sizeBounds = (int) sqrt(size) * 5;
     float angle = 0;
     float step = radians(360f / numPoints);
     for (int i = 0; i < numPoints; i++) {
       vertices.add(new PVector(startSize * cos(angle), startSize * sin(angle)));
       angle += step;
-      if (i % 2 == 0) moveList[i] = true;
+    }
+    
+    growQueue.add(new GrowItem(this, ( (360f / numPoints) / speedScale) / 1000));
+    shrinkQueue.add(new ShrinkItem(this, ( (360f / numPoints) / speedScale) / 1000));
+  }
+  
+  void addVertex() {
+    vertices.clear();
+    this.numPoints++;
+    float angle = 0;
+    float step = radians(360f / numPoints);
+    for (int i = 0; i < numPoints; i++) {
+      vertices.add(new PVector(size * cos(angle), size * sin(angle)));
+      angle += step;
     }
   }
   
   // recreate the shape and display it based on the vertex list
-  void display() {    
-    
+  void display() {
     PShape shape = createShape();
     shape.beginShape();
     shape.fill(col);
     shape.stroke(0, 0, 0, 100);
     shape.strokeWeight(3);
-    for (int i = 0; i < numPoints; i++) {
+    shape.rotate(rotation);
+    for (int i = 0; i < vertices.size(); i++) {
         tempVert = vertices.get(i);
         shape.vertex(tempVert.x, tempVert.y);
     }
     shape.endShape(CLOSE);
     shape(shape, position.x, position.y);
-  }
-  
-  // take walking steps towards another shape
-  public void moveTowards(Shape target, int time) {
-    if (target.numPoints != numPoints) {
-      println("Num points of target shape is not the same as current shape");
-      return;
-    }
     
-    moveQ.add(new Move(this, target, 1, time));
+    /*
+    PShape shapeSize = createShape(ELLIPSE, 0, 0, size * 2, size * 2);
+    shapeSize.setFill(false);
+    shapeSize.setStroke(255);
+    shape(shapeSize, position.x, position.y);
+    
+    PShape shapeBoundsOuter = createShape(ELLIPSE, 0, 0, size * 2 + sizeBounds, size * 2 + sizeBounds);
+    shapeBoundsOuter.setFill(false);
+    shapeBoundsOuter.setStroke(150);
+    shape(shapeBoundsOuter, position.x, position.y);
+    
+    PShape shapeBoundsInner = createShape(ELLIPSE, 0, 0, size * 2 - sizeBounds, size * 2 - sizeBounds);
+    shapeBoundsInner.setFill(false);
+    shapeBoundsInner.setStroke(150);
+    shape(shapeBoundsInner, position.x, position.y);
+    */    
   }
 }

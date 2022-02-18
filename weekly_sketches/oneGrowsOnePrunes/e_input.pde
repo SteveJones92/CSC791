@@ -67,7 +67,7 @@ void actions() {
     if (bigger) {
       for (Shape shape : player.shapes)  {
         shape.size *= 1.01;
-        shape.sizeBounds = (int) sqrt(shape.size) * 3;
+        shape.sizeBounds = sqrt(shape.size) * 3;
       }
       //player.growRate = 2;
       //scale *= 1.1;
@@ -77,7 +77,7 @@ void actions() {
     if (smaller) {
       for (Shape shape : player.shapes) {
         shape.size *= .99;
-        shape.sizeBounds = (int) sqrt(shape.size) * 3;
+        shape.sizeBounds = sqrt(shape.size) * 3;
       }
       //player.growRate = .5;
       //scale /= 1.1;

@@ -5,11 +5,11 @@ class Player {
   ArrayList<Bullet> bullets = new ArrayList<Bullet>();
   
   PVector position;
-  Timer fireRate = new Timer(1);
+  Timer fireRate = new Timer(.5);
   Timer moveRate = new Timer(0.01);
   Timer rotateRate = new Timer(0.01);
   int moveSpeed = 10;
-  int rotationSpeed = 3;
+  int rotationSpeed = 2;
   float growRate = 1;
   
   
@@ -19,7 +19,6 @@ class Player {
   
   public void addShape(int size, int resolution, color col) {
     shapes.add(new Shape(this.position, size, resolution, col));
-    targets.add(new Shape(new PVector(300, 300), size, resolution, color(100)));
   }
   
   void move(PVector step, float rotateAmount) {

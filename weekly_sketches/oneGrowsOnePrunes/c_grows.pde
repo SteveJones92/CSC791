@@ -12,7 +12,7 @@ void grow() {
         pos = (int)random(shape.numPoints);
         
         vect = shape.vertices.get(pos);
-        vect.mult(1.01 + 0.01 * (shape.size - vect.mag()));
+        vect.mult(1.01 + 0.01 * (shape.size - vect.mag()) / shape.sizeBounds);
       }
     }
     delay(1);
