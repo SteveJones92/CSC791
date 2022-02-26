@@ -6,6 +6,8 @@ public class FlowField {
   private int numX;
   private int numY;
   
+  public boolean reverse = false;
+  
   // create the initial grid
   public FlowField(float _cellSize) {
     if (!CreateGrid(_cellSize)) {
@@ -23,7 +25,8 @@ public class FlowField {
     }
     
     target.SetBestCost(0);
-    target.cost = 0;
+    if (target.cost != 255) target.cost = 0;
+    target.strength = 1;
     
     // go from target outwards
     ArrayList<FlowCell> openList = new ArrayList<FlowCell>();
@@ -58,7 +61,8 @@ public class FlowField {
               }
             }
             if (current_best != null) {
-              grid[i][j].direction = 180 - degrees(atan2(grid[i][j].position.y - current_best.position.y, grid[i][j].position.x - current_best.position.x));
+              if (reverse) grid[i][j].direction = 180 - degrees(atan2(current_best.position.y - grid[i][j].position.y, current_best.position.x - grid[i][j].position.x));
+              else grid[i][j].direction = 180 - degrees(atan2(grid[i][j].position.y - current_best.position.y, grid[i][j].position.x - current_best.position.x));
             }
         }
     }

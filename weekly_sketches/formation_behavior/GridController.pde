@@ -10,6 +10,20 @@ public class GridController {
     guiLayer = createGraphics(width, height);
   }
   
+  public void MergeDirections(FlowField other) {
+    for (int i = 0; i < other.grid.length; i++) {
+      for (int j = 0; j < other.grid[i].length; j++) {
+        float direction1 = field.grid[i][j].direction;
+        float direction2 = other.grid[i][j].direction;
+        float x = cos(-radians(direction1)) + cos(radians(direction2));
+        float y = sin(radians(direction1)) + sin(radians(direction2));
+        //field.grid[i][j].strength = sqrt(sq(x) + sq(y));
+        field.grid[i][j].direction = degrees(atan2(y , x));
+        //println(direction1 + " " + direction2 + " -> " + field.grid[i][j].direction);
+      }
+    }
+  }
+  
   public void Display() {
     if (display) {
       guiLayer.beginDraw();

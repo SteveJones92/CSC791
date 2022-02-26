@@ -1,4 +1,4 @@
-GridController gridController;
+//GridController gridController;
 
 Obstacles obstacles;
 
@@ -6,18 +6,16 @@ ArrayList<Object> objects = new ArrayList<>();
 
 boolean start = false;
 
+Ship player;
+
 void setup() {
   size(1600, 900);
   frameRate(60);
-  gridController = new GridController(12.5);
-  //grid.display = false;
   
   obstacles = new Obstacles();
   //obstacles.display = false;
   
-  for (int i = 0; i < 100; i++) {
-    objects.add(new Object(new PVector(random(width), random(height)), 5));
-  }
+  player = new Ship(new PVector(width / 2 + 12, height / 2 + 12));
 }
 
 void draw() {
@@ -34,15 +32,11 @@ void draw() {
   if (leftMousePressed) {
     start = true;
     if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-      gridController.field.ReportTarget(new PVector(mouseX, mouseY));
+      //gridController.field.ReportTarget(new PVector(mouseX, mouseY));
     }
   }
   
-  gridController.Display();
+  player.Update();
+  player.Display();
   obstacles.Display();
-  
-  for (Object object : objects) {
-    object.UpdatePosition();
-    object.Display();
-  }
 }

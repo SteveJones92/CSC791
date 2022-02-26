@@ -12,6 +12,8 @@ public class FlowCell {
   public int cost = 1;
   public int bestCost = 999; // use Integer.MAX_VALUE later
   public float direction = -1;
+  // full arrow
+  public float strength = 1f;
   
   ArrayList<FlowCell> neighbors = new ArrayList<>();
   
@@ -45,11 +47,11 @@ public class FlowCell {
   
   
   public void Display(PGraphics guiLayer) {
+    if (cost == 255) guiLayer.fill(255, 0, 0);
     guiLayer.rect(guiPosition.x, guiPosition.y, diameter, diameter);
     guiLayer.textSize(radius);
-    guiLayer.fill(200, 200, 200, 150);
-    if (direction != -1) guiLayer.text((int)direction, position.x - leftRightCenter, position.y + upDownCenter);
-    else guiLayer.text(bestCost, position.x - leftRightCenter, position.y + upDownCenter);
+    guiLayer.fill(200, 200, 200, 150 * strength);
+    guiLayer.text((int)direction, position.x - leftRightCenter, position.y + upDownCenter);
     guiLayer.noFill();
   }
 }
