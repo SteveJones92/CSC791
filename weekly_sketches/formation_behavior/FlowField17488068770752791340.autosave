@@ -10,8 +10,6 @@ public class FlowField {
   private int numX;
   private int numY;
   
-  private FlowCell lastTarget;
-  
   // create the initial grid
   public FlowField(float _cellSize) {
     CreateGrid(_cellSize);
@@ -22,38 +20,22 @@ public class FlowField {
     return grid[index[0]][index[1]].direction;
   }
   
-  private void UpdateGrid(PVector _position, PVector _target) {
-    int[] pIndex = PositionToIndex(_position);
+  private void UpdateGrid(PVector _target) {
     int[] index = PositionToIndex(_target);
-    
-    // if the position is a wall, dont update
-    if (grid[pIndex[0]][pIndex[1]].cost == 255) {
-      return;
-    }
-    
+    FlowCell target = grid[index[0]][index[1]];
     // reset all best costs and costs
     for (int i = 0; i < numX; i++) {
       for (int j = 0; j < numY; j++) {
-        grid[i][j].SetBestCost(Integer.MAX_VALUE);
-        grid[i][j].direction = -1;
-        grid[i][j].set = false;
-        
-        // only reset costs that arent walls
+        grid[i][j].SetBestCost(999);
         if (grid[i][j].cost != 255) grid[i][j].cost = 1;
       }
     }
     
-    FlowCell target = grid[index[0]][index[1]];
-    if (target.cost == 255) {
-      target = lastTarget;
-    } else {
-      lastTarget = target;
-      target.SetBestCost(0);
-      target.cost = 0;
-    }
+    target.SetBestCost(0);
+    if (target.cost != 255) target.cost = 0;
     
     // go from target outwards
-    ArrayList<FlowCell> openList = new ArrayList<>();
+    ArrayList<FlowCell> openList = new ArrayList<FlowCell>();
     
     target.set = true;
     openList.add(target);
@@ -61,18 +43,15 @@ public class FlowField {
     FlowCell current;
     while (openList.size() > 0) {
       current = openList.remove(0);
-      
-      if (pIndex[0] == PositionToIndex(current.position)[0] && pIndex[1] == PositionToIndex(current.position)[1]) {
+      if (PositionToIndex(player.position)[0] == PositionToIndex(current.position)[0] && PositionToIndex(player.position)[1] == PositionToIndex(current.position)[1]) {
         break;
       }
-      
       for (FlowCell neighbor : current.neighbors) {
+        if (neighbor.cost == 255) continue;
         if (neighbor.cost + current.bestCost < neighbor.bestCost) {
           neighbor.SetBestCost(neighbor.cost + current.bestCost);
-          neighbor.set = true;
-          // dont insert if it is a wall
-          if (neighbor.cost != 255)
-            InsertPriority(openList, neighbor);
+          current.set = true;
+          openList.add(neighbor);
         }
       }
     }
@@ -100,45 +79,9 @@ public class FlowField {
     }
   }
   
-  private void InsertPriority(ArrayList<FlowCell> list, FlowCell item) {
-    if (list.size() == 0) {
-      list.add(item);
-      return;
-    }
-    
-    // check to add to end
-    if (list.get(list.size() - 1).bestCost <= item.bestCost) {
-      list.add(item);
-      return;
-    }
-    
-    // find the right spot
-    for (int i = 0; i < list.size(); i++) {
-      //println(list.size());
-      if (list.get(i).bestCost > item.bestCost) {
-        list.add(i, item);
-        return;
-      }
-    }
-  }
-  
   // update the flowfield to account for an obstacle
-  // need to check if squares are containing it
+  // need to check if squares are containing it (prob neighbors)
   public void ReportObstacle(PVector _position, float _radius) {
-    int[] startPos = PositionToIndex(new PVector(_position.x - _radius, _position.y - _radius));
-    int[] endPos = PositionToIndex(new PVector(_position.x + _radius, _position.y + _radius));
-    
-    FlowCell cell;
-    for (int i = startPos[0]; i <= endPos[0]; i++) {
-      for (int j = startPos[1]; j <= endPos[1]; j++) {
-        cell = grid[i][j];
-        if (isCollidingCircleRectangle(_position.x, _position.y, _radius, cell.guiPosition.x, cell.guiPosition.y, cell.diameter, cell.diameter)) {
-          cell.IncreaseCost(255);
-        }
-      }
-    }
-    /*
-    
     int[] index = PositionToIndex(_position);
     int i = index[0];
     int j = index[1];
@@ -147,14 +90,9 @@ public class FlowField {
     for (FlowCell neighbor : grid[i][j].neighbors) {
       if (isCollidingCircleRectangle(_position.x, _position.y, _radius, neighbor.guiPosition.x, neighbor.guiPosition.y, neighbor.diameter, neighbor.diameter)) {
         neighbor.IncreaseCost(255);
-        //neighbor.set = true;
-        neighbor.direction = -1;
       }
     }
     grid[i][j].IncreaseCost(255);
-    //grid[i][j].set = true;
-    grid[i][j].direction = -1;
-    */
   }
   
   public int[] PositionToIndex(PVector _position) {

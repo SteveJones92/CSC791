@@ -1,25 +1,26 @@
-// 2 flow fields for control attempt
+// 1 target flow field
 public class Ship {
-  PGraphics guiLayer;
-  PVector position;
-  PVector target;
+  // drawing layer for the ship non-physical items
+  private PGraphics guiLayer;
+  // drawing layer for the physical ship
+  private PGraphics shipLayer;
+  // non-physical ship position, used in flowfield creation
+  private PVector position;
+  // target item, representing move direction and is the target for the flow field
+  private PVector target;
+  // speed of the ship's flow field target
+  private int targetSpeed = 5;
+
+  // needs a formation
   
-  PVector point;
-  
-  int speed = 5;
-  
-  GridController positionGrid;
   GridController targetGrid;
   
   public Ship(PVector _position) {
     position = _position;
     target = new PVector(_position.x, _position.y);
-    point = new PVector(_position.x + 20, _position.y + 20);
     guiLayer = createGraphics(width, height);
+    shipLayer = createGraphics(width, height);
     
-    positionGrid = new GridController(gridDiameter, "ArrowGreen.png");
-    positionGrid.display = false;
-    positionGrid.field.reverse = true;
     targetGrid = new GridController(gridDiameter, "ArrowGreen.png");
     //targetGrid.display = false;
   }
@@ -30,30 +31,23 @@ public class Ship {
   }
   
   public void Update() {
-    if (keys[0] == 1) Move(target, 90, speed * 2);
-    if (keys[1] == 1) Move(target, 180, speed * 2);
-    if (keys[2] == 1) Move(target, 270, speed * 2);
-    if (keys[3] == 1) Move(target, 0, speed * 2);
+    if (keys[0] == 1) Move(target, 90, targetSpeed * 2);
+    if (keys[1] == 1) Move(target, 180, targetSpeed * 2);
+    if (keys[2] == 1) Move(target, 270, targetSpeed * 2);
+    if (keys[3] == 1) Move(target, 0, targetSpeed * 2);
+
+    targetGrid.UpdateField(position, target);
     
-    // update both grid directions
-    int[] positionIndex = positionGrid.field.PositionToIndex(position);
-    //positionGrid.field.UpdateGrid(positionGrid.field.grid[positionIndex[0]][positionIndex[1]]);
-    int[] targetIndex = targetGrid.field.PositionToIndex(target);
-    targetGrid.field.UpdateGrid(targetGrid.field.grid[targetIndex[0]][targetIndex[1]]);
-    
-    // merge the directions into the position grid
-    positionGrid.MergeDirections(targetGrid.field);
-    float direction = positionGrid.field.grid[positionIndex[0]][positionIndex[1]].direction;
-    if (positionIndex[0] != targetIndex[0] || positionIndex[1] != targetIndex[1]) Move(position, (int)direction, speed);
-    
-    int[] pointIndex = positionGrid.field.PositionToIndex(point);
-    direction = positionGrid.field.grid[pointIndex[0]][pointIndex[1]].direction;
-    Move(point, (int)direction, speed);
+    // get the direction at the position and move according to that, unless they are together
+    float direction = targetGrid.GetDirection(position);
+    if (direction != -1f) Move(position, (int)direction, targetSpeed);
   }
   
   public void Display() {
-    positionGrid.Display();
+    // maintains its own guiLayer
     targetGrid.Display();
+
+    // draw ship items like position and target
     guiLayer.beginDraw();
     guiLayer.clear();
     guiLayer.fill(0, 255, 0);
@@ -62,7 +56,6 @@ public class Ship {
     guiLayer.ellipse(target.x, target.y, 10, 10);
     guiLayer.endDraw();
     image(guiLayer, 0, 0);
-    
-    ellipse(point.x, point.y, 5, 5);
+
   }
 }

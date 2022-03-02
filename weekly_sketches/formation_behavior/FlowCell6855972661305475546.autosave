@@ -4,9 +4,11 @@ public class FlowCell {
   private float diameter;
   private float radius;
   
-  private int cost = 1;
-  private int bestCost = Integer.MAX_VALUE;
-  private float direction = -1;
+  public int cost = 1;
+  public int bestCost = 999; // use Integer.MAX_VALUE later
+  public float direction = -1;
+  // full arrow
+  public float strength = 1f;
   
   boolean set = false;
   
@@ -21,13 +23,14 @@ public class FlowCell {
     position = new PVector(x * diameter + radius, y * diameter + radius);
   }
 
-  public FlowCell(int x, int y, float _diameter, int _cost) {
-    this(x, y, _diameter);
+    public FlowCell(int x, int y, float _diameter, int _cost) {
+    FlowCell(x, y, _diameter);
     cost = _cost;
   }
   
   // add only up until 255
   public void IncreaseCost(int amount) {
+      if (cost == 255) return;
       if (amount + cost > 255) cost = 255;
       else cost += amount;
   }

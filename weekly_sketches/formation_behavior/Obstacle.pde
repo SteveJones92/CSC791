@@ -11,8 +11,7 @@ public class Obstacles {
     guiLayer.beginDraw();
     guiLayer.ellipse(location.x, location.y, size, size);
     guiLayer.endDraw();
-    player.positionGrid.field.ReportObstacle(location, size);
-    player.targetGrid.field.ReportObstacle(location, size);
+    player.targetGrid.ReportObstacle(location, size / 2);
   }
   
   void Display() {
