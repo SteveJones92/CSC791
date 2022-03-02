@@ -3,7 +3,6 @@ public class FlowField {
   private FlowCell[][] grid;
   
   // diameter and radius of cell
-  private float cellRadius;
   private float cellDiameter;
 
   // dimensions of grid
@@ -22,14 +21,28 @@ public class FlowField {
     return grid[index[0]][index[1]].direction;
   }
   
-  private void UpdateGrid(PVector _position, PVector _target) {
+  private void UpdateGrid(PVector _position, ArrayList<PVector> _positions, PVector _target) {
+    ArrayList<FlowCell> cellsNeeded = new ArrayList<>();
+    // get a list of FlowCell's that need to be "covered" by the algorithm
+    for (PVector item : _positions) {
+      int[] pos = PositionToIndex(item);
+      FlowCell cell = grid[pos[0]][pos[1]];
+      if (cell.cost == 255) continue;
+      cellsNeeded.add(cell);
+      cell.needsCovering = true;
+    }
+    
     int[] pIndex = PositionToIndex(_position);
     int[] index = PositionToIndex(_target);
     
     // if the position is a wall, dont update
     if (grid[pIndex[0]][pIndex[1]].cost == 255) {
-      return;
+      //return;
     }
+    
+    FlowCell c = grid[pIndex[0]][pIndex[1]];
+    cellsNeeded.add(c);
+    c.needsCovering = true;
     
     // reset all best costs and costs
     for (int i = 0; i < numX; i++) {
@@ -62,9 +75,21 @@ public class FlowField {
     while (openList.size() > 0) {
       current = openList.remove(0);
       
+      current.needsCovering = false;
+      
+      boolean covered = true;
+      for (FlowCell cell : cellsNeeded) {
+        if (cell.needsCovering) {
+          covered = false;
+          break;
+        }
+      }
+      if (covered) break;
+      /*
       if (pIndex[0] == PositionToIndex(current.position)[0] && pIndex[1] == PositionToIndex(current.position)[1]) {
         break;
       }
+      */
       
       for (FlowCell neighbor : current.neighbors) {
         if (neighbor.cost + current.bestCost < neighbor.bestCost) {
@@ -137,24 +162,6 @@ public class FlowField {
         }
       }
     }
-    /*
-    
-    int[] index = PositionToIndex(_position);
-    int i = index[0];
-    int j = index[1];
-    grid[index[0]][index[1]].IncreaseCost(255);
-
-    for (FlowCell neighbor : grid[i][j].neighbors) {
-      if (isCollidingCircleRectangle(_position.x, _position.y, _radius, neighbor.guiPosition.x, neighbor.guiPosition.y, neighbor.diameter, neighbor.diameter)) {
-        neighbor.IncreaseCost(255);
-        //neighbor.set = true;
-        neighbor.direction = -1;
-      }
-    }
-    grid[i][j].IncreaseCost(255);
-    //grid[i][j].set = true;
-    grid[i][j].direction = -1;
-    */
   }
   
   public int[] PositionToIndex(PVector _position) {
@@ -190,7 +197,6 @@ public class FlowField {
     
     // set to new size and radius
     cellDiameter = _cellSize;
-    cellRadius = _cellSize / 2;
     println("Input Cell Size: " + originalCellSize);
     println("Cell Size Used: " + _cellSize);
     

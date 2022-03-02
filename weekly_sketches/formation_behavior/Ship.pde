@@ -12,6 +12,7 @@ public class Ship {
   private int targetSpeed = 5;
 
   // needs a formation
+  ArrayList<PVector> formation = new ArrayList<PVector>();
   
   GridController targetGrid;
   
@@ -23,6 +24,10 @@ public class Ship {
     
     targetGrid = new GridController(gridDiameter, "ArrowGreen.png");
     //targetGrid.display = false;
+    
+    for (int i = 0; i < 10; i++) {
+      formation.add(new PVector(position.x + random(50), position.y + random(50)));
+    }
   }
   
   public void Move(PVector vect, int angle, int _speed) {
@@ -36,11 +41,17 @@ public class Ship {
     if (keys[2] == 1) Move(target, 270, targetSpeed * 2);
     if (keys[3] == 1) Move(target, 0, targetSpeed * 2);
 
-    targetGrid.UpdateField(position, target);
+    targetGrid.UpdateField(position, formation, target);
     
     // get the direction at the position and move according to that, unless they are together
     float direction = targetGrid.GetDirection(position);
     if (direction != -1f) Move(position, (int)direction, targetSpeed);
+    
+    // move formation
+    for (PVector item : formation) {
+      direction = targetGrid.GetDirection(item);
+      if (direction != -1f) Move(item, (int)direction, (int)max(1, targetSpeed * random(1)));
+    }
   }
   
   public void Display() {
@@ -56,6 +67,16 @@ public class Ship {
     guiLayer.ellipse(target.x, target.y, 10, 10);
     guiLayer.endDraw();
     image(guiLayer, 0, 0);
+    
+    // draw ship physical items
+    shipLayer.beginDraw();
+    shipLayer.clear();
+    shipLayer.fill(100, 100, 100);
+    for (PVector item : formation) {
+      shipLayer.ellipse(item.x, item.y, 10, 10);
+    }
+    shipLayer.endDraw();
+    image(shipLayer, 0, 0);
 
   }
 }

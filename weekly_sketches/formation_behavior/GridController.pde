@@ -12,8 +12,8 @@ public class GridController {
     arrowType = _arrowType;
   }
 
-  public void UpdateField(PVector _position, PVector _target) {
-    field.UpdateGrid(_position, _target);
+  public void UpdateField(PVector _position, ArrayList<PVector> _positions, PVector _target) {
+    field.UpdateGrid(_position, _positions, _target);
   }
 
   public float GetDirection(PVector _position) {

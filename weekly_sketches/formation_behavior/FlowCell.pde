@@ -9,6 +9,7 @@ public class FlowCell {
   private float direction = -1;
   
   boolean set = false;
+  boolean needsCovering = false;
   
   ArrayList<FlowCell> neighbors = new ArrayList<>();
   

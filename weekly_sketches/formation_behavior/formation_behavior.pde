@@ -7,16 +7,16 @@ boolean start = false;
 Ship player;
 
 PImage arrow;
-int arrowDiameter = 5;
+int arrowDiameter = 10;
 float arrowRadius = arrowDiameter / 2;
-int gridDiameter = 10;
+int gridDiameter = 15;
 float gridRadius = gridDiameter / 2;
 
-float obstacleSize = 100;
+float obstacleSize = 20;
 
 void setup() {
   size(1600, 900);
-  frameRate(30);
+  frameRate(60);
   
   obstacles = new Obstacles();
   //obstacles.display = false;
