@@ -4,10 +4,12 @@ public class GridController {
   public FlowField field;
   private color gridColor = color(255, 255, 255, 30);
   public boolean display = true;
+  private String arrowType;
   
-  public GridController(float _cellSize) {
+  public GridController(float _cellSize, String _arrowType) {
     field = new FlowField(_cellSize);
     guiLayer = createGraphics(width, height);
+    arrowType = _arrowType;
   }
   
   public void MergeDirections(FlowField other) {
@@ -26,6 +28,8 @@ public class GridController {
   
   public void Display() {
     if (display) {
+      arrow = loadImage(arrowType);
+      arrow.resize(arrowDiameter, arrowDiameter);
       guiLayer.beginDraw();
       guiLayer.clear();
       guiLayer.noFill();

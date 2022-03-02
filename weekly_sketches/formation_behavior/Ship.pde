@@ -17,11 +17,11 @@ public class Ship {
     point = new PVector(_position.x + 20, _position.y + 20);
     guiLayer = createGraphics(width, height);
     
-    positionGrid = new GridController(25);
-    //positionGrid.display = false;
+    positionGrid = new GridController(gridDiameter, "ArrowGreen.png");
+    positionGrid.display = false;
     positionGrid.field.reverse = true;
-    targetGrid = new GridController(25);
-    targetGrid.display = false;
+    targetGrid = new GridController(gridDiameter, "ArrowGreen.png");
+    //targetGrid.display = false;
   }
   
   public void Move(PVector vect, int angle, int _speed) {
@@ -37,7 +37,7 @@ public class Ship {
     
     // update both grid directions
     int[] positionIndex = positionGrid.field.PositionToIndex(position);
-    positionGrid.field.UpdateGrid(positionGrid.field.grid[positionIndex[0]][positionIndex[1]]);
+    //positionGrid.field.UpdateGrid(positionGrid.field.grid[positionIndex[0]][positionIndex[1]]);
     int[] targetIndex = targetGrid.field.PositionToIndex(target);
     targetGrid.field.UpdateGrid(targetGrid.field.grid[targetIndex[0]][targetIndex[1]]);
     
@@ -46,6 +46,8 @@ public class Ship {
     float direction = positionGrid.field.grid[positionIndex[0]][positionIndex[1]].direction;
     if (positionIndex[0] != targetIndex[0] || positionIndex[1] != targetIndex[1]) Move(position, (int)direction, speed);
     
+    int[] pointIndex = positionGrid.field.PositionToIndex(point);
+    direction = positionGrid.field.grid[pointIndex[0]][pointIndex[1]].direction;
     Move(point, (int)direction, speed);
   }
   
@@ -55,9 +57,9 @@ public class Ship {
     guiLayer.beginDraw();
     guiLayer.clear();
     guiLayer.fill(0, 255, 0);
-    guiLayer.ellipse(position.x, position.y, 5, 5);
+    guiLayer.ellipse(position.x, position.y, 10, 10);
     guiLayer.fill(255, 0, 0);
-    guiLayer.ellipse(target.x, target.y, 5, 5);
+    guiLayer.ellipse(target.x, target.y, 10, 10);
     guiLayer.endDraw();
     image(guiLayer, 0, 0);
     

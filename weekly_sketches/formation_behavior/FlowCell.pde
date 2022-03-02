@@ -15,6 +15,8 @@ public class FlowCell {
   // full arrow
   public float strength = 1f;
   
+  boolean set = false;
+  
   ArrayList<FlowCell> neighbors = new ArrayList<>();
   
   public FlowCell(int x, int y, float _diameter) {
@@ -47,11 +49,18 @@ public class FlowCell {
   
   
   public void Display(PGraphics guiLayer) {
+    if (!set) return;
+    //set = false;
     if (cost == 255) guiLayer.fill(255, 0, 0);
     guiLayer.rect(guiPosition.x, guiPosition.y, diameter, diameter);
     guiLayer.textSize(radius);
     guiLayer.fill(200, 200, 200, 150 * strength);
-    guiLayer.text((int)direction, position.x - leftRightCenter, position.y + upDownCenter);
+    //guiLayer.text((int)direction, position.x - leftRightCenter, position.y + upDownCenter);
     guiLayer.noFill();
+    guiLayer.translate(position.x, position.y);
+    guiLayer.rotate(-radians(direction));
+    guiLayer.image(arrow, -arrowRadius, -arrowRadius);
+    guiLayer.rotate(radians(direction));
+    guiLayer.translate(-(position.x), -(position.y));
   }
 }

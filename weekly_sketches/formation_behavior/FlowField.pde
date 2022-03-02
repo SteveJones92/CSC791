@@ -31,15 +31,20 @@ public class FlowField {
     // go from target outwards
     ArrayList<FlowCell> openList = new ArrayList<FlowCell>();
     
+    target.set = true;
     openList.add(target);
     
     FlowCell current;
     while (openList.size() > 0) {
       current = openList.remove(0);
+      if (PositionToIndex(player.position)[0] == PositionToIndex(current.position)[0] && PositionToIndex(player.position)[1] == PositionToIndex(current.position)[1]) {
+        break;
+      }
       for (FlowCell neighbor : current.neighbors) {
         if (neighbor.cost == 255) continue;
         if (neighbor.cost + current.bestCost < neighbor.bestCost) {
           neighbor.SetBestCost(neighbor.cost + current.bestCost);
+          current.set = true;
           openList.add(neighbor);
         }
       }
@@ -50,20 +55,21 @@ public class FlowField {
     // go through the entire grid, check all the neighbors and see which has the best cost
     // set direction to point towards that neighbhor
     for (int i = 0; i < numX; i++) {
-        for (int j = 0; j < numY; j++) {            
-            best = grid[i][j].bestCost;
-            
-            FlowCell current_best = null;
-            for (FlowCell neighbor : grid[i][j].neighbors) {
-              if (neighbor.bestCost < best) {
-                best = neighbor.bestCost;
-                current_best = neighbor;
-              }
+        for (int j = 0; j < numY; j++) { 
+          if (!grid[i][j].set) continue;
+          best = grid[i][j].bestCost;
+          
+          FlowCell current_best = null;
+          for (FlowCell neighbor : grid[i][j].neighbors) {
+            if (neighbor.bestCost < best) {
+              best = neighbor.bestCost;
+              current_best = neighbor;
             }
-            if (current_best != null) {
-              if (reverse) grid[i][j].direction = 180 - degrees(atan2(current_best.position.y - grid[i][j].position.y, current_best.position.x - grid[i][j].position.x));
-              else grid[i][j].direction = 180 - degrees(atan2(grid[i][j].position.y - current_best.position.y, grid[i][j].position.x - current_best.position.x));
-            }
+          }
+          if (current_best != null) {
+            if (reverse) grid[i][j].direction = 180 - degrees(atan2(current_best.position.y - grid[i][j].position.y, current_best.position.x - grid[i][j].position.x));
+            else grid[i][j].direction = 180 - degrees(atan2(grid[i][j].position.y - current_best.position.y, grid[i][j].position.x - current_best.position.x));
+          }
         }
     }
   }
