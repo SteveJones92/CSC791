@@ -7,16 +7,16 @@ boolean start = false;
 Ship player;
 
 PImage arrow;
-int arrowDiameter = 10;
+int arrowDiameter = 15;
 float arrowRadius = arrowDiameter / 2;
-int gridDiameter = 15;
+int gridDiameter = 20;
 float gridRadius = gridDiameter / 2;
 
-float obstacleSize = 20;
+float obstacleSize = 10;
 
 void setup() {
   size(1600, 900);
-  frameRate(60);
+  frameRate(20);
   
   obstacles = new Obstacles();
   //obstacles.display = false;
@@ -28,6 +28,10 @@ void draw() {
   background(0);
   if (rightMousePressed) {
     obstacles.AddObstacle(new PVector(mouseX, mouseY), obstacleSize);
+  }
+  
+  if (leftMousePressed) {
+    player.target = new PVector(mouseX, mouseY);
   }
   
   player.Update();

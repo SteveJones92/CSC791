@@ -40,9 +40,11 @@ public class FlowCell {
   
   public void Display(PGraphics guiLayer) {
     if (!set) return;
-    if (cost == 255) guiLayer.fill(255, 0, 0);
-    guiLayer.rect(guiPosition.x, guiPosition.y, diameter, diameter);
-    guiLayer.noFill();
+    if (cost == 255) {
+      guiLayer.fill(255, 0, 0);
+      guiLayer.rect(guiPosition.x, guiPosition.y, diameter, diameter);
+      guiLayer.noFill();
+    }
     // draw arrow
     guiLayer.translate(position.x, position.y);
     guiLayer.rotate(-radians(direction));

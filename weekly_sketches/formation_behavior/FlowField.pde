@@ -78,18 +78,15 @@ public class FlowField {
       current.needsCovering = false;
       
       boolean covered = true;
-      for (FlowCell cell : cellsNeeded) {
-        if (cell.needsCovering) {
+      for (int i = 0; i < cellsNeeded.size(); i++) {
+        if (cellsNeeded.get(i).needsCovering) {
           covered = false;
           break;
+        } else {
+          cellsNeeded.remove(i--);
         }
       }
       if (covered) break;
-      /*
-      if (pIndex[0] == PositionToIndex(current.position)[0] && pIndex[1] == PositionToIndex(current.position)[1]) {
-        break;
-      }
-      */
       
       for (FlowCell neighbor : current.neighbors) {
         if (neighbor.cost + current.bestCost < neighbor.bestCost) {
