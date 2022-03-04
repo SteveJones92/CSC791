@@ -21,13 +21,18 @@ public class FlowField {
     return grid[index[0]][index[1]].direction;
   }
   
+  public float GetWallPower(PVector _position) {
+    int[] index = PositionToIndex(_position);
+    return grid[index[0]][index[1]].wallPower;
+  }
+  
   private void UpdateGrid(PVector _position, ArrayList<PVector> _positions, PVector _target) {
     ArrayList<FlowCell> cellsNeeded = new ArrayList<>();
     // get a list of FlowCell's that need to be "covered" by the algorithm
     for (PVector item : _positions) {
       int[] pos = PositionToIndex(item);
       FlowCell cell = grid[pos[0]][pos[1]];
-      if (cell.cost == 255) continue;
+      //if (cell.cost == 255) continue;
       cellsNeeded.add(cell);
       cell.needsCovering = true;
     }
@@ -149,6 +154,12 @@ public class FlowField {
   public void ReportObstacle(PVector _position, float _radius) {
     int[] startPos = PositionToIndex(new PVector(_position.x - _radius, _position.y - _radius));
     int[] endPos = PositionToIndex(new PVector(_position.x + _radius, _position.y + _radius));
+    int xRange = endPos[0] - startPos[0] + 1;
+    int yRange = endPos[1] - startPos[1] + 1;
+    startPos[0] -= xRange * 2;
+    endPos[0] += xRange * 2;
+    startPos[1] -= yRange * 2;
+    endPos[1] += yRange * 2;
     
     FlowCell cell;
     for (int i = startPos[0]; i <= endPos[0]; i++) {
@@ -156,6 +167,11 @@ public class FlowField {
         cell = grid[i][j];
         if (isCollidingCircleRectangle(_position.x, _position.y, _radius, cell.guiPosition.x, cell.guiPosition.y, cell.diameter, cell.diameter)) {
           cell.IncreaseCost(255);
+          cell.wallPower = 1.f;
+        } else if (i >= startPos[0] + xRange && i <= endPos[0] - xRange && j >= startPos[1] + yRange && j <= endPos[1] - yRange) {
+          cell.wallPower = max(cell.wallPower, 0.66f);
+        } else {
+          cell.wallPower = max(cell.wallPower, 0.33f);
         }
       }
     }

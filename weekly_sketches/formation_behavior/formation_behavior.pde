@@ -7,12 +7,12 @@ boolean start = false;
 Ship player;
 
 PImage arrow;
-int arrowDiameter = 15;
+int arrowDiameter = 5;
 float arrowRadius = arrowDiameter / 2;
-int gridDiameter = 20;
+int gridDiameter = 10;
 float gridRadius = gridDiameter / 2;
 
-float obstacleSize = 10;
+float obstacleSize = 20;
 
 void setup() {
   size(1600, 900);

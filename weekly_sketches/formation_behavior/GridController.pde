@@ -19,6 +19,10 @@ public class GridController {
   public float GetDirection(PVector _position) {
     return field.GetDirection(_position);
   }
+  
+  public float GetWallPower(PVector _position) {
+    return field.GetWallPower(_position);
+  }
 
   public void ReportObstacle(PVector _position, float _size) {
     field.ReportObstacle(_position, _size);

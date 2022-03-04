@@ -27,7 +27,7 @@ public class Ship {
     targetGrid = new GridController(gridDiameter, "ArrowGreen.png");
     //targetGrid.display = false;
     
-    for (int i = 1; i < 5; i++) {
+    for (int i = 1; i < 10; i++) {
       PVector newP = new PVector(position.x + i * cellSize, position.y);
       positions.add(newP);
       formation.add(new ShipCell(position, newP, cellSize));
@@ -58,16 +58,17 @@ public class Ship {
     
     // get the direction at the position and move according to that, unless they are together
     float direction = targetGrid.GetDirection(position);
-    if (direction != -1f) Move(position, (int)direction, targetSpeed);
+    if (direction != -1f) Move(position, (int)direction, min(targetSpeed, sqrt(position.dist(target) / 2)));
     
     float direct;
+    float power;
     // move formation
     for (ShipCell item : formation) {
       direct = targetGrid.GetDirection(item.rPos);
-      if (direction != -1f) direct = item.UpdateDirection(direct, .1f);
-      else direct = item.UpdateDirection(direct, 1f);
+      power = targetGrid.GetWallPower(item.rPos);
+      direct = item.UpdateDirection(direct, power);
 
-       if (direct != -1f) Move(item.rPos, (int)direct, targetSpeed);
+      if (direct != -1f) Move(item.rPos, (int)direct, min(targetSpeed, sqrt(item.rPos.dist(target) / 2)));
     }
   }
   

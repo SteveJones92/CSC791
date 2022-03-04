@@ -11,6 +11,9 @@ public class FlowCell {
   boolean set = false;
   boolean needsCovering = false;
   
+  
+  float wallPower = 0.0f;
+  
   ArrayList<FlowCell> neighbors = new ArrayList<>();
   
   public FlowCell(int x, int y, float _diameter) {
@@ -40,8 +43,8 @@ public class FlowCell {
   
   public void Display(PGraphics guiLayer) {
     if (!set) return;
-    if (cost == 255) {
-      guiLayer.fill(255, 0, 0);
+    if (wallPower != 0.0f) {
+      guiLayer.fill(255 * wallPower, 0, 0);
       guiLayer.rect(guiPosition.x, guiPosition.y, diameter, diameter);
       guiLayer.noFill();
     }

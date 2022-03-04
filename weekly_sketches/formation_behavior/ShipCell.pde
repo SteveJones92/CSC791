@@ -16,16 +16,34 @@ public class ShipCell {
   }
 
   // try to keep formation position
-  public float UpdateDirection(float _direction, float rate) {
+  public float UpdateDirection(float _direction, float power) {
     PVector f = GetFormationPos();
 
     if (f.dist(rPos) < 3) return -1;
+    //if (_direction == -1) return -1;
 
     float direction = degrees(atan2(rPos.y - f.y, f.x - rPos.x));
-    if (random(1) < rate) {
-      return direction;
+    if (direction < 0) direction += 360;
+    println("vector: " + _direction);
+    println("format: " + direction);
+    float val = _direction - direction;
+    if (val > 180) {
+      val = val - 360;
+    } else if (val < -180) {
+      val = (val + 360);
     }
-    return _direction;
+    val *= power;
+    direction += val;
+    println("Power : " + power);
+    println("Format: " + direction);
+    println();
+    
+    // merge direction and direction based on power, 0 = 100% towards formation position, .5 = 50% towards formation and 50% from vector field
+    // 1 = 100% vector field (avoiding a wall)
+    //_direction = degrees(atan2( (sin(radians(_direction)) + sin(radians(direction))) / 2,
+    //                            (cos(radians(_direction)) + cos(radians(direction))) / 2 ));
+    
+    return direction;
   }
 
   private PVector GetFormationPos() {
