@@ -24,8 +24,8 @@ public class ShipCell {
 
     float direction = degrees(atan2(rPos.y - f.y, f.x - rPos.x));
     if (direction < 0) direction += 360;
-    println("vector: " + _direction);
-    println("format: " + direction);
+    //println("vector: " + _direction);
+    //println("format: " + direction);
     float val = _direction - direction;
     if (val > 180) {
       val = val - 360;
@@ -34,9 +34,9 @@ public class ShipCell {
     }
     val *= power;
     direction += val;
-    println("Power : " + power);
-    println("Format: " + direction);
-    println();
+    //println("Power : " + power);
+    //println("Format: " + direction);
+    //println();
     
     // merge direction and direction based on power, 0 = 100% towards formation position, .5 = 50% towards formation and 50% from vector field
     // 1 = 100% vector field (avoiding a wall)
