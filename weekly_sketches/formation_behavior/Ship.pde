@@ -25,7 +25,7 @@ public class Ship {
     shipLayer = createGraphics(width, height);
     
     targetGrid = new GridController(gridDiameter, "ArrowGreen.png");
-    targetGrid.display = false;
+    targetGrid.display = displayGrid;
     int dist = cellSize * 2;
     int count = 0;
     for (int layers = 1; layers <= 40; layers++) {
@@ -55,7 +55,8 @@ public class Ship {
     
     // get the direction at the position and move according to that, unless they are together
     float direction = targetGrid.GetDirection(position);
-    if (direction != -1f) Move(position, (int)direction, min(targetSpeed, sqrt(position.dist(target) / 2)));
+    float mainSpeed = sqrt(position.dist(target) / 2);
+    if (direction != -1f) Move(position, (int)direction, min(targetSpeed / 1.1, mainSpeed));
     
     float direct;
     float power;
@@ -65,7 +66,7 @@ public class Ship {
       power = targetGrid.GetWallPower(item.rPos);
       direct = item.UpdateDirection(direct, power);
 
-      if (direct != -1f) Move(item.rPos, (int)direct, min(targetSpeed, sqrt(item.rPos.dist(target) / 2)));
+      if (direct != -1f) Move(item.rPos, (int)direct, min(targetSpeed, sqrt(item.rPos.dist(item.GetFormationPos()) / 2)));
     }
   }
   

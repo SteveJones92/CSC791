@@ -2,15 +2,15 @@ Obstacles obstacles;
 
 ArrayList<Object> objects = new ArrayList<>();
 
-boolean start = false;
+boolean displayGrid = true;
 
 Ship player;
 
-PImage arrow;
-int arrowDiameter = 10;
-float arrowRadius = arrowDiameter / 2;
-int gridDiameter = 15;
+int gridDiameter = 20;
 float gridRadius = gridDiameter / 2;
+PImage arrow;
+int arrowDiameter = (int)gridDiameter / 2;
+float arrowRadius = arrowDiameter / 2;
 
 float obstacleSize = 20;
 
