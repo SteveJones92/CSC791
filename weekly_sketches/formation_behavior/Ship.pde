@@ -9,8 +9,8 @@ public class Ship {
   // target item, representing move direction and is the target for the flow field
   private PVector target;
   // speed of the ship's flow field target
-  private int targetSpeed = 5;
-  private int cellSize = 3;
+  private float targetSpeed = 5;
+  private int cellSize = 2;
 
   ArrayList<ShipCell> formation = new ArrayList<>();
   ArrayList<PVector> positions = new ArrayList<>();
@@ -28,8 +28,10 @@ public class Ship {
     targetGrid.display = displayGrid;
     int dist = cellSize * 2;
     int count = 0;
-    for (int layers = 1; layers <= 40; layers++) {
-      for (int i = 0; i < 360; i+= 40 / layers) {
+    for (int layers = 1; layers <= numLayers; layers++) {
+      float rand = random(20, 50);
+      for (int i = 0; i < 360; i+= 1) {
+        if (i % 70 < rand) continue;
         PVector newP = new PVector(position.x + cos(radians(i)) * dist, position.y + sin(radians(i)) * dist);
         positions.add(newP);
         formation.add(new ShipCell(position, newP, cellSize));
@@ -55,8 +57,7 @@ public class Ship {
     
     // get the direction at the position and move according to that, unless they are together
     float direction = targetGrid.GetDirection(position);
-    float mainSpeed = sqrt(position.dist(target) / 2);
-    if (direction != -1f) Move(position, (int)direction, min(targetSpeed / 1.1, mainSpeed));
+    if (direction != -1f) Move(position, (int)direction, min(targetSpeed / 1.5, sqrt(position.dist(target) / 2)));
     
     float direct;
     float power;
