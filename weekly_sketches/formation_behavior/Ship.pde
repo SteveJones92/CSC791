@@ -10,7 +10,7 @@ public class Ship {
   private PVector target;
   // speed of the ship's flow field target
   private int targetSpeed = 5;
-  private int cellSize = 5;
+  private int cellSize = 3;
 
   ArrayList<ShipCell> formation = new ArrayList<>();
   ArrayList<PVector> positions = new ArrayList<>();
@@ -25,22 +25,19 @@ public class Ship {
     shipLayer = createGraphics(width, height);
     
     targetGrid = new GridController(gridDiameter, "ArrowGreen.png");
-    //targetGrid.display = false;
-    
-    for (int i = 1; i < 10; i++) {
-      PVector newP = new PVector(position.x + i * cellSize, position.y);
-      positions.add(newP);
-      formation.add(new ShipCell(position, newP, cellSize));
-      newP = new PVector(position.x - i * cellSize, position.y);
-      positions.add(newP);
-      formation.add(new ShipCell(position, newP, cellSize));
-      newP = new PVector(position.x, position.y - i * cellSize);
-      positions.add(newP);
-      formation.add(new ShipCell(position, newP, cellSize));
-      newP = new PVector(position.x, position.y + i * cellSize);
-      positions.add(newP);
-      formation.add(new ShipCell(position, newP, cellSize));
+    targetGrid.display = false;
+    int dist = cellSize * 2;
+    int count = 0;
+    for (int layers = 1; layers <= 40; layers++) {
+      for (int i = 0; i < 360; i+= 40 / layers) {
+        PVector newP = new PVector(position.x + cos(radians(i)) * dist, position.y + sin(radians(i)) * dist);
+        positions.add(newP);
+        formation.add(new ShipCell(position, newP, cellSize));
+        count++;
+      }
+      dist += cellSize;
     }
+    println(count);
   }
   
   public void Move(PVector vect, int angle, float _speed) {
@@ -89,6 +86,7 @@ public class Ship {
     // draw ship physical items
     shipLayer.beginDraw();
     shipLayer.clear();
+    shipLayer.noStroke();
     for (ShipCell item : formation) {
       item.Display(shipLayer);
     }

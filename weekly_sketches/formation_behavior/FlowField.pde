@@ -32,7 +32,7 @@ public class FlowField {
     for (PVector item : _positions) {
       int[] pos = PositionToIndex(item);
       FlowCell cell = grid[pos[0]][pos[1]];
-      if (cell.cost == 255) return;
+      if (cell.cost == 255) continue;
       cellsNeeded.add(cell);
       cell.needsCovering = true;
     }
