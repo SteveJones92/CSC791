@@ -5,7 +5,7 @@ public class FlowCell {
   private float radius;
   
   private int cost = 1;
-  private int bestCost = Integer.MAX_VALUE;
+  private float bestCost = Float.MAX_VALUE;
   private float direction = -1;
   
   boolean set = false;
@@ -14,7 +14,8 @@ public class FlowCell {
   
   float wallPower = 0.0f;
   
-  ArrayList<FlowCell> neighbors = new ArrayList<>();
+  ArrayList<FlowCell> neighborsH = new ArrayList<>();
+  ArrayList<FlowCell> neighborsD = new ArrayList<>();
   
   public FlowCell(int x, int y, float _diameter) {
     diameter = _diameter;
@@ -36,7 +37,7 @@ public class FlowCell {
       else cost += amount;
   }
   
-  public void SetBestCost(int _bestCost) {
+  public void SetBestCost(float _bestCost) {
     bestCost = _bestCost;
   }
   

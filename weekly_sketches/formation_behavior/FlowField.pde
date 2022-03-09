@@ -66,13 +66,13 @@ public class FlowField {
       target = lastTarget;
     } else {
       lastTarget = target;
-      target.SetBestCost(0);
-      target.cost = 0;
     }
     
     // go from target outwards
     ArrayList<FlowCell> openList = new ArrayList<>();
     
+    target.SetBestCost(0);
+    target.cost = 0;
     target.set = true;
     openList.add(target);
     
@@ -93,9 +93,21 @@ public class FlowField {
       }
       if (covered) break;
       
-      for (FlowCell neighbor : current.neighbors) {
+      for (FlowCell neighbor : current.neighborsH) {
         if (neighbor.cost + current.bestCost < neighbor.bestCost) {
           neighbor.SetBestCost(neighbor.cost + current.bestCost);
+          neighbor.set = true;
+          // dont insert if it is a wall
+          if (neighbor.cost != 255)
+            InsertPriority(openList, neighbor);
+        }
+      }
+      
+      // for it being a diagonal, so technically farther
+      float extra_cost = sqrt(2);
+      for (FlowCell neighbor : current.neighborsD) {
+        if (neighbor.cost * extra_cost + current.bestCost < neighbor.bestCost) {
+          neighbor.SetBestCost(neighbor.cost * extra_cost + current.bestCost);
           neighbor.set = true;
           // dont insert if it is a wall
           if (neighbor.cost != 255)
@@ -105,7 +117,7 @@ public class FlowField {
     }
     
     // update the directions to point towards lower costing neighbor
-    int best;
+    float best;
     // go through the entire grid, check all the neighbors and see which has the best cost
     // set direction to point towards that neighbhor
     for (int i = 0; i < numX; i++) {
@@ -114,7 +126,14 @@ public class FlowField {
           best = grid[i][j].bestCost;
           
           FlowCell current_best = null;
-          for (FlowCell neighbor : grid[i][j].neighbors) {
+          for (FlowCell neighbor : grid[i][j].neighborsH) {
+            if (neighbor.bestCost < best) {
+              best = neighbor.bestCost;
+              current_best = neighbor;
+            }
+          }
+          
+          for (FlowCell neighbor : grid[i][j].neighborsD) {
             if (neighbor.bestCost < best) {
               best = neighbor.bestCost;
               current_best = neighbor;
@@ -232,18 +251,18 @@ public class FlowField {
     for (int i = 0; i < numX; i++) {
       for (int j = 0; j < numY; j++) {
             // add left neighbor
-            if (i != 0) grid[i][j].neighbors.add(grid[i - 1][j]);
+            if (i != 0) grid[i][j].neighborsH.add(grid[i - 1][j]);
             // add right neighbor
-            if (i != numX - 1) grid[i][j].neighbors.add(grid[i + 1][j]);
+            if (i != numX - 1) grid[i][j].neighborsH.add(grid[i + 1][j]);
             // add top neighbor
-            if (j != 0) grid[i][j].neighbors.add(grid[i][j - 1]);
+            if (j != 0) grid[i][j].neighborsH.add(grid[i][j - 1]);
             // add bottom neighbor
-            if (j != numY - 1) grid[i][j].neighbors.add(grid[i][j + 1]);
+            if (j != numY - 1) grid[i][j].neighborsH.add(grid[i][j + 1]);
             // add corners
-            if (i != 0 && j != 0) grid[i][j].neighbors.add(grid[i - 1][j - 1]);
-            if (i != numX - 1 && j != 0) grid[i][j].neighbors.add(grid[i + 1][j - 1]);
-            if (i != 0 && j != numY - 1) grid[i][j].neighbors.add(grid[i - 1][j + 1]);
-            if (i != numX - 1 && j != numY - 1) grid[i][j].neighbors.add(grid[i + 1][j + 1]);
+            if (i != 0 && j != 0) grid[i][j].neighborsD.add(grid[i - 1][j - 1]);
+            if (i != numX - 1 && j != 0) grid[i][j].neighborsD.add(grid[i + 1][j - 1]);
+            if (i != 0 && j != numY - 1) grid[i][j].neighborsD.add(grid[i - 1][j + 1]);
+            if (i != numX - 1 && j != numY - 1) grid[i][j].neighborsD.add(grid[i + 1][j + 1]);
       }
     }
   }
